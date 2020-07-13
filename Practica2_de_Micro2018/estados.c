@@ -6,10 +6,11 @@
 #include "inc/hw_memmap.h"      //Macros defining the memory map of the device.
 #include "driverlib/timer.h"
 
-int colorValue = 0, sum;
+int colorValue = 0, n, sum;
 
 
 void led_rgb(){
+    //The flag that was raised by the interruption of the timer is lowered.
     TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
     if(colorValue == 14){
         colorValue = 0;
@@ -36,7 +37,15 @@ void state1_rest(){
 
 
 void state2_fibonacci(){
-    int i, n = 8, f0 = 0, f1 = 1, fn, fn_one, fn_two;
+    int PORTBpin, bits_0a3, bits_4a6, i, f0 = 0, f1 = 1, fn, fn_one, fn_two;
+    //The PORTB pin that raised the interrupt is determined.
+    PORTBpin = GPIOIntStatus(GPIO_PORTB_BASE, true);
+    //The flag that was raised by the interruption of the pin enter is lowered.
+    GPIOIntClear(GPIO_PORTB_BASE, PORTBpin);
+
+    bits_0a3 = GPIOPinRead(GPIO_PORTD_BASE, data_bits_0a3);
+    bits_4a6 = GPIOPinRead(GPIO_PORTA_BASE, data_bits_4a6);
+    n = bits_0a3 + bits_4a6;
     fn_one = f1;
     fn_two = f0;
 
