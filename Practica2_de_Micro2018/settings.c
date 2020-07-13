@@ -1,11 +1,12 @@
 #include <global.h>
 #include <stdint.h>     //To use integer type values.
 #include <stdbool.h>
-
 #include "inc/tm4c123gh6pm.h"
 #include "driverlib/sysctl.h"   //To configure the clock, enable peripherals and general control.
 #include "driverlib/gpio.h"     //Definitions and configurations for GPIO peripheral.
 #include "inc/hw_memmap.h"      //Macros defining the memory map of the device.
+#include "inc/hw_types.h"
+#include "inc/hw_gpio.h"        //It is used to unlock PF0 pin.
 #include "driverlib/timer.h"
 #include "driverlib/interrupt.h"
 
@@ -13,6 +14,7 @@
 #define option_bit_11    GPIO_PIN_3
 #define enter            GPIO_PIN_2
 #define timerload        80000000   //80x10^6 because this value corresponds ton1 second.
+#define buttons          GPIO_PIN_0|GPIO_PIN_4
 
 
 void initial_settings(){
@@ -44,6 +46,13 @@ void GPIO_settings(){
     GPIOPadConfigSet(GPIO_PORTB_BASE, option_bit_11, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
     GPIOPadConfigSet(GPIO_PORTB_BASE, enter, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
 
+    //Unlocking PF0 pin.
+    HWREG(GPIO_PORTF_BASE + GPIO_O_LOCK) = GPIO_LOCK_KEY;
+    HWREG(GPIO_PORTF_BASE + GPIO_O_CR) |= 0x01;
+    HWREG(GPIO_PORTF_BASE + GPIO_O_LOCK) = 0;
+    GPIOPinTypeGPIOInput(GPIO_PORTF_BASE, buttons);
+    GPIOPadConfigSet(GPIO_PORTF_BASE, buttons, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
+
     GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, ledrgb);
 }
 
@@ -52,8 +61,8 @@ void TIMER_settings(){
     //The timer is set as periodic, so when the count ends, it starts again automatically.
     TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
     TimerLoadSet(TIMER0_BASE, TIMER_A, timerload);
-    //The timers starts counting.
-    TimerEnable(TIMER0_BASE, TIMER_A);
+    //The timer starts counting.
+    //TimerEnable(TIMER0_BASE, TIMER_A);
 }
 
 
@@ -64,6 +73,12 @@ void interrupt_settings(){
     GPIOIntEnable(GPIO_PORTB_BASE, enter);
     //The enter push button will raise an interruption when a falling edge occurs when pressed.
     GPIOIntTypeSet(GPIO_PORTB_BASE, enter, GPIO_FALLING_EDGE);
+
+    IntEnable(INT_GPIOF);
+    GPIOIntEnable(GPIO_PORTF_BASE, buttons);
+    //The push buttons will raise an interruption when a falling edge occurs when pressed.
+    GPIOIntTypeSet(GPIO_PORTF_BASE, buttons, GPIO_FALLING_EDGE);
+    //IntPrioritySet(INT_GPIOF, 0);
 
     IntEnable(INT_TIMER0A);
     //The timer will raise an interruption when it finishes counting.

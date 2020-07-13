@@ -1,7 +1,6 @@
 #include <global.h>
 #include <stdint.h>     //To use integer type values.
 #include <stdbool.h>
-
 #include "driverlib/gpio.h"     //Definitions and configurations for GPIO peripheral.
 #include "inc/hw_memmap.h"      //Macros defining the memory map of the device.
 #include "driverlib/timer.h"
@@ -29,7 +28,7 @@ bool even_number(int number){
 }
 
 
-/************************* STATES **************************/
+/*********************************** STATES ************************************/
 
 void state1_rest(){
     GPIOPinWrite(GPIO_PORTF_BASE, ledrgb, colorValue);
@@ -43,6 +42,7 @@ void state2_fibonacci(){
     //The flag that was raised by the interruption of the pin enter is lowered.
     GPIOIntClear(GPIO_PORTB_BASE, PORTBpin);
 
+    //The data bits (0 a 6) are read to obtain the entered number.
     bits_0a3 = GPIOPinRead(GPIO_PORTD_BASE, data_bits_0a3);
     bits_4a6 = GPIOPinRead(GPIO_PORTA_BASE, data_bits_4a6);
     n = bits_0a3 + bits_4a6;
