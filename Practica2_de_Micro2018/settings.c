@@ -13,7 +13,7 @@
 #define data_bits_4a6    GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6
 #define option_bits_7a10 GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7
 #define option_bit_11    GPIO_PIN_3
-#define timerload        80000000
+#define timerload        80000000   //80x10^6 because this value corresponds ton1 second.
 
 
 void initial_settings(){
@@ -22,6 +22,7 @@ void initial_settings(){
 }
 
 
+//Enabling Port A, B, C, D, F and TIMER 0.
 void enabling_PERIPH(){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
@@ -43,8 +44,10 @@ void GPIO_settings(){
 
 
 void TIMER_settings(){
+    //The timer is set as periodic, so when the count ends, it starts again automatically.
     TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
     TimerLoadSet(TIMER0_BASE, TIMER_A, timerload);
+    //The timers starts counting.
     TimerEnable(TIMER0_BASE, TIMER_A);
 }
 
@@ -52,5 +55,6 @@ void TIMER_settings(){
 void interrupt_settings(){
     IntMasterEnable();
     IntEnable(INT_TIMER0A);
+    //The timer will raise an interrupt when it finishes counting.
     TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
 }

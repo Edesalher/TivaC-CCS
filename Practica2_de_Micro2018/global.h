@@ -17,5 +17,6 @@ void TIMER_settings(void);
 void interrupt_settings(void);
 
 void state1_rest(void);
+void state2_fibonacci(void);
 
 #endif /* GLOBAL_H_ */

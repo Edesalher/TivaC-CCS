@@ -3,14 +3,16 @@
 #include <stdbool.h>
 
 
-int main(void){
+void main(void){
     initial_settings();
     enabling_PERIPH();
     GPIO_settings();
     TIMER_settings();
     interrupt_settings();
 
+    state2_fibonacci();
+
     while(true){
-        state1_rest();
+        //state1_rest();
     }
 }
