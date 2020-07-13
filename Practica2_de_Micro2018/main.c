@@ -52,9 +52,9 @@ void main(void){
     TIMER_settings();
     interrupt_settings();
 
+    //The timer starts counting.
+    TimerEnable(TIMER0_BASE, TIMER_A);
     while(true){
-        //The timer starts counting.
-        TimerEnable(TIMER0_BASE, TIMER_A);
         if(fsm_state == rest){
             state1_rest();
         }else if(fsm_state == fibonacci){

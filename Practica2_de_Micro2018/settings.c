@@ -37,12 +37,12 @@ void enabling_PERIPH(){
 //Configurations of pins and resistors for the inputs.
 void GPIO_settings(){
     GPIOPinTypeGPIOInput(GPIO_PORTD_BASE, data_bits_0a3);
-    GPIOPinTypeGPIOInput(GPIO_PORTA_BASE, data_bits_4a6);
-    GPIOPinTypeGPIOInput(GPIO_PORTC_BASE, option_bits_7a10);
-    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, option_bit_11|enter);
     GPIOPadConfigSet(GPIO_PORTD_BASE, data_bits_0a3, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
+    GPIOPinTypeGPIOInput(GPIO_PORTA_BASE, data_bits_4a6);
     GPIOPadConfigSet(GPIO_PORTA_BASE, data_bits_4a6, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
+    GPIOPinTypeGPIOInput(GPIO_PORTC_BASE, option_bits_7a10);
     GPIOPadConfigSet(GPIO_PORTC_BASE, option_bits_7a10, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
+    GPIOPinTypeGPIOInput(GPIO_PORTB_BASE, option_bit_11|enter);
     GPIOPadConfigSet(GPIO_PORTB_BASE, option_bit_11, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPD);
     GPIOPadConfigSet(GPIO_PORTB_BASE, enter, GPIO_STRENGTH_2MA, GPIO_PIN_TYPE_STD_WPU);
 
@@ -61,8 +61,6 @@ void TIMER_settings(){
     //The timer is set as periodic, so when the count ends, it starts again automatically.
     TimerConfigure(TIMER0_BASE, TIMER_CFG_PERIODIC);
     TimerLoadSet(TIMER0_BASE, TIMER_A, timerload);
-    //The timer starts counting.
-    //TimerEnable(TIMER0_BASE, TIMER_A);
 }
 
 
