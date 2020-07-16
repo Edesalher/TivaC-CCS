@@ -1,0 +1,19 @@
+UARTCharGet
+	- Si HAY caracter recibido en la FIFO: OBTIENE el caracter recibido.
+	- Retorna caracter leído.
+
+	- Si NO HAY caracter recibido en la FIFO, ESPERA hasta que lo haya y luego OBTIENE el caracter.
+	- No retorna, sino que espera.
+
+UARTCharGetNonBlocking
+	- Si HAY caracter recibido en la FIFO: OBTIENE el caracter recibido.
+	- Retorna caracter leído.
+
+	- Si NO HAY caracter recibido en la FIFO, NO OBTIENE nada. 
+	- Retorna un -1.
+
+UARTCharsAvail
+	- Determina si hay caracteres en la FIFO de recepción.
+	- Levanta una bandera indicando si hay o no datos en la FIFO.
+	- Si HAY dato en la FIFO, retorna TRUE.
+	- Si NO HAY dato en la FIFO, retorna FALSE.
