@@ -45,6 +45,21 @@ void status_change(){
 }
 
 
+void enter_button(){
+    int PORTBpin;
+    //The PORTB pin that raised the interrupt is determined.
+    PORTBpin = GPIOIntStatus(GPIO_PORTB_BASE, true);
+    //The flag that was raised by the interruption of the pin enter is lowered.
+    GPIOIntClear(GPIO_PORTB_BASE, PORTBpin);
+
+    if(fsm_state == rest){
+
+    }else if(fsm_state == fibonacci){
+        state2_fibonacci();
+    }
+}
+
+
 void main(void){
     initial_settings();
     enabling_PERIPH();

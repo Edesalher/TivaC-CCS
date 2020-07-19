@@ -56,8 +56,8 @@ extern uint32_t __STACK_TOP;
 //*****************************************************************************
 // To be added by user
 extern void led_rgb(void);
-void state2_fibonacci(void);
 void status_change(void);
+void enter_button(void);
 //*****************************************************************************
 //
 // The vector table.  Note that the proper constructs must be placed on this to
@@ -86,7 +86,7 @@ void (* const g_pfnVectors[])(void) =
     IntDefaultHandler,                      // The PendSV handler
     IntDefaultHandler,                      // The SysTick handler
     IntDefaultHandler,                      // GPIO Port A
-    state2_fibonacci,                      // GPIO Port B
+    enter_button,                      // GPIO Port B
     IntDefaultHandler,                      // GPIO Port C
     IntDefaultHandler,                      // GPIO Port D
     IntDefaultHandler,                      // GPIO Port E

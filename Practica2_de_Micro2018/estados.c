@@ -27,7 +27,6 @@ bool even_number(int number){
     }
 }
 
-
 /*********************************** STATES ************************************/
 
 void state1_rest(){
@@ -36,11 +35,7 @@ void state1_rest(){
 
 
 void state2_fibonacci(){
-    int PORTBpin, bits_0a3, bits_4a6, i, f0 = 0, f1 = 1, fn, fn_one, fn_two;
-    //The PORTB pin that raised the interrupt is determined.
-    PORTBpin = GPIOIntStatus(GPIO_PORTB_BASE, true);
-    //The flag that was raised by the interruption of the pin enter is lowered.
-    GPIOIntClear(GPIO_PORTB_BASE, PORTBpin);
+    int bits_0a3, bits_4a6, i, f0 = 0, f1 = 1, fn, fn_one, fn_two;
 
     //The data bits (0 a 6) are read to obtain the entered number.
     bits_0a3 = GPIOPinRead(GPIO_PORTD_BASE, data_bits_0a3);
