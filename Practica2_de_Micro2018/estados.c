@@ -4,6 +4,7 @@
 #include "driverlib/gpio.h"     //Definitions and configurations for GPIO peripheral.
 #include "inc/hw_memmap.h"      //Macros defining the memory map of the device.
 #include "driverlib/timer.h"
+#include "uartstdio.h"
 
 #define MatrixA 0
 #define MatrixB 8
@@ -30,6 +31,19 @@ bool even_number(int number){
     }else{
         return false;
     }
+}
+
+
+void print_matrix(int matrix[4][4]){
+    int i, j;
+
+    for(i = 0; i <= 3; i++){
+        for(j = 0; j <= 3; j++){
+            UARTprintf("%d ", matrix[i][j]);
+        }
+        UARTprintf("\n\r");
+    }
+    UARTprintf("\n\r");
 }
 
 /*********************************** STATES ************************************/
@@ -60,6 +74,9 @@ void state2_fibonacci(){
         fn_two = fn_one;
         fn_one = fn;
     }
+    UARTprintf("n = %d \n\r", n);
+    UARTprintf("Sum: %d \n\r", sum);
+    UARTprintf("\n\r");
 }
 
 
@@ -81,7 +98,11 @@ void state4_storage(){
     bit_11 = GPIOPinRead(GPIO_PORTB_BASE, option_bit_11);
     if(bit_11 == MatrixA){
         matrix_A[row][column] = value;
+        UARTprintf("Matrix A\n\r");
+        print_matrix(matrix_A);
     }else if(bit_11 == MatrixB){
         matrix_B[row][column] = value;
+        UARTprintf("Matrix B\n\r");
+        print_matrix(matrix_B);
     }
 }
