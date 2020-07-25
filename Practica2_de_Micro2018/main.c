@@ -11,6 +11,7 @@
 #define rest      0
 #define fibonacci 1
 #define storage   2
+#define operation 3
 
 int fsm_state = 0;
 
@@ -25,10 +26,11 @@ struct FSM {
 
 typedef struct FSM FSMstate;
 
-FSMstate states[3] = {
-                   {storage, rest, fibonacci, ledState1, GPIO_PORTB_BASE},
+FSMstate states[4] = {
+                   {operation, rest, fibonacci, ledState1, GPIO_PORTB_BASE},
                    {rest, fibonacci, storage, ledState2, GPIO_PORTB_BASE},
-                   {fibonacci, storage, rest, ledState4, GPIO_PORTE_BASE},
+                   {fibonacci, storage, operation, ledState4, GPIO_PORTE_BASE},
+                   {storage, operation, rest, ledState5, GPIO_PORTB_BASE},
 };
 
 
@@ -72,6 +74,8 @@ void enter_button(){
         state2_fibonacci();
     }else if(fsm_state == storage){
         state4_storage();
+    }else if(fsm_state == operation){
+        state5_operation();
     }
 }
 

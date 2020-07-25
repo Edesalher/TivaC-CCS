@@ -30,5 +30,6 @@ void UART_settings(void);
 void state1_rest(void);
 void state2_fibonacci(void);
 void state4_storage(void);
+void state5_operation(void);
 
 #endif /* GLOBAL_H_ */

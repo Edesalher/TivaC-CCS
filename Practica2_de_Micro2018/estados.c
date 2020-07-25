@@ -9,9 +9,16 @@
 #define MatrixA 0
 #define MatrixB 8
 
+#define Matrix1A 0
+#define Matrix1B 8
+#define Matrix2A 0
+#define Matrix2B 2
+#define addition       0
+#define substraction   1
+#define multiplication 2
+
 int colorValue = 0, n, sum, row, column;
-int matrix_A[4][4];
-int matrix_B[4][4];
+int matrix_A[4][4], matrix_B[4][4], result[4][4];
 
 
 void led_rgb(){
@@ -30,6 +37,39 @@ bool even_number(int number){
         return true;
     }else{
         return false;
+    }
+}
+
+
+void add(int matrix1[4][4], int matrix2[4][4]){
+    int m, n;
+
+    for(m = 0; m <= 3; m++){
+        for(n = 0; n >= 3; n++){
+            result[m][n] = matrix1[m][n] + matrix2[m][n];
+        }
+    }
+}
+
+
+void sub(int matrix1[4][4], int matrix2[4][4]){
+    int m, n;
+
+    for(m = 0; m <= 3; m++){
+        for(n = 0; n >= 3; n++){
+            result[m][n] = matrix1[m][n] - matrix2[m][n];
+        }
+    }
+}
+
+
+void clean_matrix(int matrix[4][4]){
+    int i, j;
+
+    for(i = 0; i <= 3; i++){
+        for(j = 0; j <= 3; j++){
+            matrix[i][j] = 0;
+        }
     }
 }
 
@@ -98,11 +138,50 @@ void state4_storage(){
     bit_11 = GPIOPinRead(GPIO_PORTB_BASE, option_bit_11);
     if(bit_11 == MatrixA){
         matrix_A[row][column] = value;
-        UARTprintf("Matrix A\n\r");
+        UARTprintf("MATRIX A\n\r");
         print_matrix(matrix_A);
     }else if(bit_11 == MatrixB){
         matrix_B[row][column] = value;
-        UARTprintf("Matrix B\n\r");
+        UARTprintf("MATRIX B\n\r");
         print_matrix(matrix_B);
     }
+}
+
+
+void state5_operation(){
+    int bit_11, bit_8, bits_7a8, bits_9a10, operation;
+    clean_matrix(result);
+
+    //The value of bit 11 is read to know which matrix1 was selected.
+    bit_11 = GPIOPinRead(GPIO_PORTB_BASE, option_bit_11);
+    //The value of bit 8 is read to know which matrix2 was selected.
+    bits_7a8 = GPIOPinRead(GPIO_PORTC_BASE, option_bits_7a8);
+    bit_8 = bits_7a8/16;
+    //The value of bits 9 and 10 are read to know which operation the user wants to do.
+    bits_9a10 = GPIOPinRead(GPIO_PORTC_BASE, option_bits_9a10);
+    operation = bits_9a10/64;
+
+    if(operation == addition){
+        if(bit_11 == Matrix1A && bit_8 == Matrix2A){
+            add(matrix_A, matrix_A);
+        }else if(bit_11 == Matrix1A && bit_8 == Matrix2B){
+            add(matrix_A, matrix_B);
+        }else if(bit_11 == Matrix1B && bit_8 == Matrix2A){
+            add(matrix_B, matrix_A);
+        }else if(bit_11 == Matrix1B && bit_8 == Matrix2B){
+            add(matrix_B, matrix_B);
+        }
+    }else if(operation == substraction){
+        if(bit_11 == Matrix1A && bit_8 == Matrix2A){
+            sub(matrix_A, matrix_A);
+        }else if(bit_11 == Matrix1A && bit_8 == Matrix2B){
+            sub(matrix_A, matrix_B);
+        }else if(bit_11 == Matrix1B && bit_8 == Matrix2A){
+            sub(matrix_B, matrix_A);
+        }else if(bit_11 == Matrix1B && bit_8 == Matrix2B){
+            sub(matrix_B, matrix_B);
+        }
+    }
+    UARTprintf("RESULT\n\r");
+    print_matrix(result);
 }
