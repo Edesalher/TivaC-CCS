@@ -77,6 +77,7 @@ void enter_button(){
     }else if(fsm_state == operation){
         state5_operation();
     }
+    SysCtlDelay((0.3*SysCtlClockGet())/3);
 }
 
 
