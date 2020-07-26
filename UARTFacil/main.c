@@ -24,7 +24,7 @@ void TIVACSetup(void){
 }
 
 void UARTSetup(void){
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);                                //Se habilita módulo UART0.
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);                                //Se habilita mï¿½dulo UART0.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);                                //Se habilita el PUERTO A.
     GPIOPinTypeUART(GPIO_PORTA_BASE, PA0|PA1);                                  //PA0 y PA1 como tipo UART.
     GPIOPinConfigure(GPIO_PA0_U0RX);                                            //PA0 = RX.
@@ -43,7 +43,7 @@ void PrintData(int dato){
     int i, longitudArreglo = 0;
     char DATO[] = "";
 
-    ltoa(dato, DATO);
+    ltoa(dato, DATO, 10);
     longitudArreglo = ArraySize(DATO);
     for(i = 0; i < longitudArreglo; i++){
         UARTCharPut(UART0_BASE, DATO[i]);
