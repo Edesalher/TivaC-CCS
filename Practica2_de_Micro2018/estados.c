@@ -69,6 +69,21 @@ void sub(array_int *matrix1, array_int *matrix2){
 }
 
 
+//It allows multiplying two 4x4 matrices.
+void multi(array_int *matrix1, array_int *matrix2){
+    int m1, m2, n2, sum;
+
+    for(m1 = 0; m1 <= 3; m1++){
+        for(n2 = 0; n2 <= 3; n2++){
+            sum = 0;
+            for(m2 = 0; m2 <= 3; m2++){
+                sum += matrix1[m1][m2]*matrix2[m2][n2];
+            }
+            result[m1][n2] = sum;
+        }
+    }
+}
+
 //Reset a matrix.
 void clean_matrix(int matrix[4][4]){
     int i, j;
@@ -197,11 +212,14 @@ void state5_operation(){
         operation_text = "ADDITION";
         add(matrix1, matrix2);
     }else if(operation == substraction){
-        operation_text = "SUBSTRACTION";
+        operation_text = "SUBTRACTION";
         sub(matrix1, matrix2);
+    }else if(operation == multiplication){
+        operation_text = "MULTIPLICATION";
+        multi(matrix1, matrix2);
     }
     //Print the resulting matrix.
-    UARTprintf(" --RESULT OF %s--\n\r", operation_text);
+    UARTprintf(" --RESULT OF THE%s--\n\r", operation_text);
     print_matrix(result);
-    UARTprintf("******************************\n\r");
+    UARTprintf("*********************************\n\r");
 }
