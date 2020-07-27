@@ -219,7 +219,7 @@ void state5_operation(){
         multi(matrix1, matrix2);
     }
     //Print the resulting matrix.
-    UARTprintf(" --RESULT OF THE%s--\n\r", operation_text);
+    UARTprintf(" --RESULT OF THE %s--\n\r", operation_text);
     print_matrix(result);
     UARTprintf("*********************************\n\r");
 }
