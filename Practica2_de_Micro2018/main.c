@@ -20,17 +20,17 @@ struct FSM {
     int previous_state;
     int actual_state;
     int next_state;
-    int ledState;
+    int led_to_be_on;
     int ledPort;
 };
-
+//Creating a new type using the structure.
 typedef struct FSM FSMstate;
 
 FSMstate states[4] = {
-                   {operation, rest, fibonacci, ledState1, GPIO_PORTB_BASE},
-                   {rest, fibonacci, storage, ledState2, GPIO_PORTB_BASE},
-                   {fibonacci, storage, operation, ledState4, GPIO_PORTE_BASE},
-                   {storage, operation, rest, ledState5, GPIO_PORTB_BASE},
+                   {operation, rest,           fibonacci,   ledState1, GPIO_PORTB_BASE},
+                   {rest,            fibonacci,  storage,     ledState2, GPIO_PORTB_BASE},
+                   {fibonacci,  storage,     operation, ledState4, GPIO_PORTE_BASE},
+                   {storage,    operation, rest,            ledState5, GPIO_PORTB_BASE},
 };
 
 
@@ -41,19 +41,20 @@ void status_change(){
     //The flag that was raised by the interruption of the button is lowered.
     GPIOIntClear(GPIO_PORTF_BASE, PORTFpin);
 
-    GPIOPinWrite(states[fsm_state].ledPort, states[fsm_state].ledState, 0);
+    GPIOPinWrite(states[fsm_state].ledPort, states[fsm_state].led_to_be_on, 0);
     if(PORTFpin == GPIO_INT_PIN_0){
         fsm_state = states[fsm_state].next_state;
     }else if(PORTFpin == GPIO_INT_PIN_4){
         fsm_state = states[fsm_state].previous_state;
     }
-    GPIOPinWrite(states[fsm_state].ledPort, states[fsm_state].ledState, states[fsm_state].ledState);
+    //The corresponding led according to the state is lights up.
+    GPIOPinWrite(states[fsm_state].ledPort, states[fsm_state].led_to_be_on, states[fsm_state].led_to_be_on);
 
     if(fsm_state == rest){
         //The timer starts counting.
         TimerEnable(TIMER0_BASE, TIMER_A);
     }else{
-        //The timer stops counting.
+        //The timer stops counting and the rgb led is turns off.
         TimerDisable(TIMER0_BASE, TIMER_A);
         GPIOPinWrite(GPIO_PORTF_BASE, ledrgb, 0);
     }
@@ -62,11 +63,8 @@ void status_change(){
 
 
 void enter_button(){
-    int PORTBpin;
-    //The PORTB pin that raised the interrupt is determined.
-    PORTBpin = GPIOIntStatus(GPIO_PORTB_BASE, true);
     //The flag that was raised by the interruption of the pin enter is lowered.
-    GPIOIntClear(GPIO_PORTB_BASE, PORTBpin);
+    GPIOIntClear(GPIO_PORTB_BASE, ENTER);
 
     if(fsm_state == rest){
 
@@ -89,10 +87,10 @@ void main(void){
     interrupt_settings();
     UART_settings();
 
-    //The timer starts counting.
+    //The timer for the state 1 starts counting.
     TimerEnable(TIMER0_BASE, TIMER_A);
     //The ledState1 starts.
-    GPIOPinWrite(states[fsm_state].ledPort, states[fsm_state].ledState, states[fsm_state].ledState);
+    GPIOPinWrite(states[fsm_state].ledPort, states[fsm_state].led_to_be_on, states[fsm_state].led_to_be_on);
     while(true){
         if(fsm_state == rest){
             state1_rest();
