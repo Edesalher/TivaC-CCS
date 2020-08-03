@@ -8,15 +8,17 @@
 #include "driverlib/timer.h"
 #include "uartstdio.h"
 
-#define rest      0
-#define fibonacci 1
-#define storage   2
-#define operation 3
+#define rest                0
+#define fibonacci      1
+#define palindrome 2
+#define storage         3
+#define operation    4
 
 int fsm_state = 0;
 
 
 struct FSM {
+    char *text;
     int previous_state;
     int actual_state;
     int next_state;
@@ -26,17 +28,18 @@ struct FSM {
 //Creating a new type using the structure.
 typedef struct FSM FSMstate;
 
-FSMstate states[4] = {
-                   {operation, rest,           fibonacci,   ledState1, GPIO_PORTB_BASE},
-                   {rest,            fibonacci,  storage,     ledState2, GPIO_PORTB_BASE},
-                   {fibonacci,  storage,     operation, ledState4, GPIO_PORTE_BASE},
-                   {storage,    operation, rest,            ledState5, GPIO_PORTB_BASE},
+FSMstate states[5] = {
+                   {"REST",                  operation,     rest,                fibonacci,      ledState1, GPIO_PORTB_BASE},
+                   {"FIBONACCI",      rest,                 fibonacci,      palindrome, ledState2, GPIO_PORTB_BASE},
+                   {"PALINDROME", fibonacci,       palindrome,  storage,        ledState3, GPIO_PORTE_BASE},
+                   {"STORAGE",         palindrome,  storage,         operation,    ledState4, GPIO_PORTE_BASE},
+                   {"OPERATION",    storage,         operation,     rest,               ledState5, GPIO_PORTB_BASE},
 };
 
 
 void status_change(){
     int PORTFpin;
-    //tHE PORTF pin that raised the interrupt is determined.
+    //The PORTF pin that raised the interrupt is determined.
     PORTFpin = GPIOIntStatus(GPIO_PORTF_BASE, true);
     //The flag that was raised by the interruption of the button is lowered.
     GPIOIntClear(GPIO_PORTF_BASE, PORTFpin);
@@ -47,6 +50,7 @@ void status_change(){
     }else if(PORTFpin == GPIO_INT_PIN_4){
         fsm_state = states[fsm_state].previous_state;
     }
+    UARTprintf("%s STATE\n\r", states[fsm_state].text);
     //The corresponding led according to the state is lights up.
     GPIOPinWrite(states[fsm_state].ledPort, states[fsm_state].led_to_be_on, states[fsm_state].led_to_be_on);
 
@@ -70,6 +74,8 @@ void enter_button(){
 
     }else if(fsm_state == fibonacci){
         state2_fibonacci();
+    }else if(fsm_state == palindrome){
+        state3_palindrome();
     }else if(fsm_state == storage){
         state4_storage();
     }else if(fsm_state == operation){
@@ -91,6 +97,7 @@ void main(void){
     TimerEnable(TIMER0_BASE, TIMER_A);
     //The ledState1 starts.
     GPIOPinWrite(states[fsm_state].ledPort, states[fsm_state].led_to_be_on, states[fsm_state].led_to_be_on);
+    UARTprintf("%s STATE\n\r", states[fsm_state].text);
     while(true){
         if(fsm_state == rest){
             state1_rest();

@@ -1,6 +1,7 @@
 #include <global.h>
 #include <stdint.h>     //To use integer type values.
 #include <stdbool.h>
+#include <string.h>
 #include "driverlib/gpio.h"     //Definitions and configurations for GPIO peripheral.
 #include "inc/hw_memmap.h"      //Macros defining the memory map of the device.
 #include "driverlib/timer.h"
@@ -13,7 +14,7 @@
 #define Matrix1B 8
 #define Matrix2A 0
 #define Matrix2B 2
-#define addition       0
+#define addition            0
 #define substraction   1
 #define multiplication 2
 
@@ -84,6 +85,22 @@ void multi(array_int *matrix1, array_int *matrix2){
     }
 }
 
+
+//To determine if a number is palindrome or not.
+//If the number is palindrome return "true".
+bool is_palindrome(char *string){
+    int length = strlen(string);
+    int start = 0, fin = length - 1;
+
+    while(string[start] == string[fin]){
+        if(start >= fin) return true;
+        start++;
+        fin--;
+    }
+    return false;
+}
+
+
 //Reset a matrix.
 void clean_matrix(int matrix[4][4]){
     int i, j;
@@ -108,7 +125,7 @@ void print_matrix(int matrix[4][4]){
     }
 }
 
-/*********************************** STATES ************************************/
+/************************************** STATES ***************************************/
 
 void state1_rest(){
     GPIOPinWrite(GPIO_PORTF_BASE, ledrgb, colorValue);
@@ -145,7 +162,45 @@ void state2_fibonacci(){
     //Print the data.
     UARTprintf("n = %d \n\r", n);
     UARTprintf("Sum: %d \n\r", sum);
-    UARTprintf("********************\n\r");
+    UARTprintf("************************************\n\r");
+}
+
+
+void state3_palindrome(){
+    char *list_of_numbers[11] = {"123321", "12", "4554", "365", "3", "22", "898", "4", "45", "50", "88"};
+    //    char *list_of_numbers[6] = {"1231", "12", "455", "365", "38", "20"};
+    int bits_0a3, bits_4a6, n;
+    //The data bits (0 a 6) are read to obtain the value of the n number.
+    bits_0a3 = GPIOPinRead(GPIO_PORTD_BASE, data_bits_0a3);
+    bits_4a6 = GPIOPinRead(GPIO_PORTA_BASE, data_bits_4a6);
+    n = bits_0a3 + bits_4a6;
+
+    int i, k = 0;
+
+    for(i = 0; i < (sizeof(list_of_numbers) / sizeof(list_of_numbers[0])); i++){
+        if(is_palindrome(list_of_numbers[i])){
+            /*
+             * The k variable is used to keep count of the palindromes found.
+             * When the k value corresponds to the  requested n value, the
+             * palindrome number is displayed.
+             */
+            k++;
+            if(k == n){
+                UARTprintf("El palíndromo número %d es: %s\n", n, list_of_numbers[i]);
+            }
+        }
+    }
+    /*
+     * In the first case, the value of k remains 0 because no palindrome number was found.
+     * In the second case, palindrome numbers are found but, the requested value of n
+     * is greater than k.
+     */
+    if (k == 0){
+        UARTprintf("No hay palíndromos\n");
+    } else if (n > k && k != 0){
+        UARTprintf("n muy grande. Solo se encontraron %d números palíndromos.\n", k);
+    }
+    UARTprintf("************************************\n\r");
 }
 
 
@@ -171,13 +226,13 @@ void state4_storage(){
         matrix_A[row][column] = value;
         UARTprintf(" --MATRIX A--\n\r");
         print_matrix(matrix_A);
-        UARTprintf("********************\n\r");
+        UARTprintf("************************************\n\r");
     }else if(matrix == MatrixB){
         //The value that was entered is stored in the corresponding position in the matrix.
         matrix_B[row][column] = value;
         UARTprintf(" --MATRIX B--\n\r");
         print_matrix(matrix_B);
-        UARTprintf("********************\n\r");
+        UARTprintf("************************************\n\r");
     }
 }
 
@@ -221,5 +276,5 @@ void state5_operation(){
     //Print the resulting matrix.
     UARTprintf(" --RESULT OF THE %s--\n\r", operation_text);
     print_matrix(result);
-    UARTprintf("*********************************\n\r");
+    UARTprintf("************************************\n\r");
 }

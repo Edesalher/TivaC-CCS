@@ -13,7 +13,7 @@
 #include "driverlib/uart.h"
 #include "uartstdio.h"
 
-#define timerload 80000000   //80x10^6 because this value corresponds ton1 second.
+#define timerload 80000000   //80x10^6 because this value corresponds to 1 second.
 #define BUTTONS GPIO_PIN_0|GPIO_PIN_4
 #define RX               GPIO_PIN_0  //PA0
 #define TX               GPIO_PIN_1  //PA1
