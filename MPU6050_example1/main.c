@@ -14,6 +14,7 @@
 #include "sensorlib/mpu6050.h"
 #include "inc/hw_ints.h"
 #include "driverlib/interrupt.h"
+#include <stdarg.h>
 
 #define SLAVE_ADDRESS 0x68
 //Value for A0 and A1 pins.
