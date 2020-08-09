@@ -56,8 +56,8 @@ extern uint32_t __STACK_TOP;
 //*****************************************************************************
 // To be added by user
 extern void led_rgb(void);
-void status_change(void);
-void enter_button(void);
+extern void status_change(void);
+extern void enter_button(void);
 //*****************************************************************************
 //
 // The vector table.  Note that the proper constructs must be placed on this to
