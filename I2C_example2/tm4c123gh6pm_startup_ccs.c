@@ -55,7 +55,7 @@ extern uint32_t __STACK_TOP;
 //
 //*****************************************************************************
 // To be added by user
-void I2C0SlaveIntHandler(void);
+extern void I2C0SlaveIntHandler(void);
 //*****************************************************************************
 //
 // The vector table.  Note that the proper constructs must be placed on this to
