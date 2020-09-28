@@ -65,7 +65,7 @@ void init_I2C (){
     //// I2C data transfer rate set to 400kbps.
     I2CMasterInitExpClk(I2C0_BASE, SysCtlClockGet(), true);
 
-    //// clear I2C FIFOs
+    //// Clear I2C FIFOs
     HWREG(I2C0_BASE + I2C_O_FIFOCTL) = 80008000;
 
     I2CMInit(&I2Cinst, I2C0_BASE, INT_I2C0, 0xff, 0xff, SysCtlClockGet());
@@ -100,7 +100,8 @@ void I2CMSimpleIntHandler (void){
 void mpu6050_example (void){
     float accelerometer_data[3], gyroscope_data[3];
     tMPU6050 mpu6050;
-    float ax = 0, ay = 0, az = 0, gx = 0, gy = 0, gz = 0;
+    //float ax = 0, ay = 0, az = 0;
+    float gx = 0, gy = 0, gz = 0;
 
     process_done = false;
     MPU6050Init(&mpu6050, &I2Cinst, mpu6050_address, mpu6050_callback, &mpu6050);
