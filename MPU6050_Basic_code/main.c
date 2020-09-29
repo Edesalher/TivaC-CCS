@@ -1,24 +1,40 @@
-#include <stdio.h>
+/*
+ * CODE AND BASIC USAGE TO READ DATA FROM MPU6050 SENSOR.
+ * Author: Edwing Estuardo Alvarez Hernández.
+ * Date:   September 28, 2020
+ *
+ * DESCRIPTION:
+ * The data from the mpu6050 sensor is read using the I2C protocol.
+ * The I2C0 module and the I2C master driver provided by the sensor
+ * library (sensorlib) are used.
+ * The I2C master driver allows the mpu6050 sensor to be used with the TivaC.
+ *
+ * CONNECTION:
+ * SCL --> PB2
+ * SDA --> PB3
+ *
+ * The data from the mpu6050 is sent by the TivaC over UART. The serial
+ * terminal must be started with a 115200 baud rate.
+ */
 #include <stdint.h>
 #include <stdbool.h>
-#include <math.h> ////
+#include <math.h>
 
-#include "inc/hw_i2c.h"
 #include "inc/hw_memmap.h"
-#include "inc/hw_types.h"
 #include "inc/hw_ints.h"
+//#include "inc/hw_types.h"
+//#include "inc/hw_i2c.h"
 
 #include "driverlib/sysctl.h"
 #include "driverlib/gpio.h"
 #include "driverlib/pin_map.h"
 #include "driverlib/uart.h"
 #include "driverlib/i2c.h"
-#include "driverlib/interrupt.h"
 
 #include "uartstdio.h"
-#include "sensorlib/hw_mpu6050.h"
 #include "sensorlib/i2cm_drv.h"
 #include "sensorlib/mpu6050.h"
+#include "sensorlib/hw_mpu6050.h"
 
 // Constant values to use.
 #define mpu6050_address 0x68
@@ -54,7 +70,6 @@ void init_I2C (){
     // Enabling the I2C0 and PortB which contains i2c0.
     // PB2 = SCL, PB3 = SDA, both as I2C pins.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_I2C0);
-//    SysCtlPeripheralReset(SYSCTL_PERIPH_I2C0);  // Reset module.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
 
     GPIOPinConfigure(GPIO_PB2_I2C0SCL);
@@ -125,8 +140,16 @@ void mpu6050 (void){
                            );
     while (!process_done);*/
 
+    process_done = false;
+    MPU6050ReadModifyWrite(&mpu6050, MPU6050_O_PWR_MGMT_1, 0x00, 0b00000010 & MPU6050_PWR_MGMT_1_DEVICE_RESET, mpu6050_callback, &mpu6050);
+    while (!process_done);
+
+    /*process_done = false;
+    MPU6050ReadModifyWrite(&mpu6050, MPU6050_O_PWR_MGMT_2, 0x00, 0x00, mpu6050_callback, &mpu6050);
+    while (!process_done);*/
+
     while (true){
-        /* The reading of the accelerometer and gyroscope data from
+        /* Reading of the accelerometer and gyroscope data from
          * the mpu6050 sensor is started. Then the data is read
          * using ...AccelGetFloat and ...GyroGetFloat which return
          * the values in m/s2 and rad/s respectively.
@@ -168,7 +191,7 @@ void mpu6050 (void){
 void main (void){
     // Setting the clock frequency of the TivaC to 16MHz.
     SysCtlClockSet(SYSCTL_SYSDIV_1 | SYSCTL_USE_PLL | SYSCTL_OSC_INT | SYSCTL_XTAL_16MHZ);
-//    SysCtlClockSet(SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ | SYSCTL_USE_PLL | SYSCTL_SYSDIV_2_5);
+//    SysCtlClockSet(SYSCTL_OSC_MAIN | SYSCTL_XTAL_16MHZ | SYSCTL_USE_PLL | SYSCTL_SYSDIV_2_5); // 80MHz.
 
     init_I2C();
     init_console();
