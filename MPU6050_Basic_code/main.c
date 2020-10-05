@@ -1,7 +1,7 @@
 /*
  * CODE AND BASIC USAGE TO READ DATA FROM MPU6050 SENSOR.
  * Author: Edwing Estuardo Alvarez Hernández.
- * Date:   September 28, 2020
+ * Date:   Modified on September 28, 2020
  *
  * DESCRIPTION:
  * The data from the mpu6050 sensor is read using the I2C protocol.
@@ -13,6 +13,7 @@
  * SCL --> PB2
  * SDA --> PB3
  *
+ * HOW TO USE:
  * The data from the mpu6050 is sent by the TivaC over UART. The serial
  * terminal must be started with a 115200 baud rate.
  */
