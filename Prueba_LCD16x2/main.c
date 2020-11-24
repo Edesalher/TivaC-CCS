@@ -21,8 +21,8 @@ int conteo = 0;
 char cuenta[] = "";
 //int columna;
 //int cantidad_elementos;
-//int tamaño_del_array;
-//int tamaño_del_tipo_de_dato;
+//int tamaï¿½o_del_array;
+//int tamaï¿½o_del_tipo_de_dato;
 //char buffer[10];
 
 int main()
@@ -43,12 +43,12 @@ int main()
          //has_lcd_write(1,1,"LCD EN CCS");
          has_lcd_write(1,1,"NIVEL:");
          //SysCtlDelay(10000000);
-         ltoa(conteo,cuenta);
+         //ltoa(conteo,cuenta);
          //has_lcd_write(1,8,buffer);
-         has_lcd_write(1,8,cuenta);
-//         tamaño_del_array = sizeof(cuenta);
-//         tamaño_del_tipo_de_dato = sizeof(char);
-//         cantidad_elementos = (tamaño_del_array / tamaño_del_tipo_de_dato);
+         //has_lcd_write(1,8,cuenta);
+//         tamaï¿½o_del_array = sizeof(cuenta);
+//         tamaï¿½o_del_tipo_de_dato = sizeof(char);
+//         cantidad_elementos = (tamaï¿½o_del_array / tamaï¿½o_del_tipo_de_dato);
 //         if(cantidad_elementos >= 2){
 //             columna = 11;
 //         }else{
