@@ -1,14 +1,14 @@
-/**************************************** LIBRERÍAS DE C *****************************************************/
+/**************************************** LIBRERï¿½AS DE C *****************************************************/
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <math.h>
-/************************************ LIBRERÍAS PARA LA TIVA C ***********************************************/
+/************************************ LIBRERï¿½AS PARA LA TIVA C ***********************************************/
 #include "inc/hw_memmap.h"
 #include "inc/tm4c123gh6pm.h"
 #include "inc/hw_types.h"
 #include "driverlib/sysctl.h"
-#include "driverlib/gpio.h"      //Periféricos de entrada y salida
+#include "driverlib/gpio.h"      //Perifï¿½ricos de entrada y salida
 #include "driverlib/pin_map.h"   //Configurar pines de GPIO
 #include "driverlib/interrupt.h" //Para interrupciones
 #include "driverlib/timer.h"     //Para activar el timer
@@ -34,15 +34,15 @@ void GPIO_Config(void) {
 }
 
 void TIMER_Config(void){
-    //Configuración de TIMER0A para generar diparo en TRIGGER de 10us y para medir el tiempo de duración del pulso ECHO.
+    //Configuraciï¿½n de TIMER0A para generar diparo en TRIGGER de 10us y para medir el tiempo de duraciï¿½n del pulso ECHO.
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);       //Se habilita el TIMER0.
     TimerConfigure(TIMER0_BASE, TIMER_CFG_ONE_SHOT_UP); //Se configura el modo del TIMER0 como disparo ascendente.
-    TimerLoadSet(TIMER0_BASE, TIMER_A, carga);          //Se carga el TIMER0A (numero de cuentas que hará).
+    TimerLoadSet(TIMER0_BASE, TIMER_A, carga);          //Se carga el TIMER0A (numero de cuentas que harï¿½).
     TimerEnable(TIMER0_BASE, TIMER_A);                  //Se habilita TIMER0A.
 }
 
 void INTERRUPTIONS(void){
-    IntMasterEnable();                                            //Se habilitan las interrupciones globales del periférico NVIC.
+    IntMasterEnable();                                            //Se habilitan las interrupciones globales del perifï¿½rico NVIC.
     IntEnable(INT_GPIOB);                                         //Se habilitan las interrupciones del puerto B.
     GPIOIntEnable(GPIO_PORTB_BASE, GPIO_INT_PIN_6);               //Se habilita la interrupcion por PB6 = ECHO.
     GPIOIntTypeSet(GPIO_PORTB_BASE, ECHOPin, GPIO_BOTH_EDGES);    //ECHO interrumpe por flanco de subida y bajada.
@@ -68,9 +68,9 @@ int ArraySize(char ARRAY[]){
     longitudDelArreglo = sizeof(ARRAY)/sizeof(ARRAY[0]);
     return longitudDelArreglo;
 }
-/************************************* RUTINAS DE INTERRUPCIÓN *************************************************/
+/************************************* RUTINAS DE INTERRUPCIï¿½N *************************************************/
 void TRIGGER(void){
-    TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);     //Se limpia la interrupción por fin de conteo de TIMER0A.
+    TimerIntClear(TIMER0_BASE, TIMER_TIMA_TIMEOUT);     //Se limpia la interrupciï¿½n por fin de conteo de TIMER0A.
     TimerDisable(TIMER0_BASE, TIMER_A);                 //Se deshabilita TIMER0A.
     if(trigger){
         trigger = false;
@@ -85,7 +85,7 @@ void TRIGGER(void){
 }
 
 void ECHO(void){
-    GPIOIntClear(GPIO_PORTB_BASE, ECHOPin);            //Se limpia la interrupción por PB6(ECHO).
+    GPIOIntClear(GPIO_PORTB_BASE, ECHOPin);            //Se limpia la interrupciï¿½n por PB6(ECHO).
     if(echo){
         echo = false;
         TimerEnable(TIMER0_BASE, TIMER_A);             //Se habilita el TIMER0A porque PB6(ECHO) = 1.
@@ -98,7 +98,7 @@ void ECHO(void){
         }else{
             tiempo = (tiempoB - tiempoA)/80000000;     //Se calcula el valor del tiempo medido en segundos.
         }
-        distancia = ((34300*tiempo)/2) - 2.7;          //Se calcula el valor de la distancia medida en centímetros (cm).
+        distancia = ((34300*tiempo)/2) - 2.7;          //Se calcula el valor de la distancia medida en centï¿½metros (cm).
     }
 }
 
@@ -115,7 +115,7 @@ int main(void) {
 
     while(true){
         UARTwrite("Distancia: ", 11);
-        ltoa(distancia, DISTANCIA);
+        ltoa(distancia, DISTANCIA, 3);
         longitudArreglo = ArraySize(DISTANCIA);
         for(i = 0; i < longitudArreglo; i++){
             UARTCharPut(UART0_BASE, DISTANCIA[i]);
