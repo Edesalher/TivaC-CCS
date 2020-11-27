@@ -38,15 +38,15 @@ void GPIOSetup(void){
 }
 
 void ECHOInterruptSetup(void){
-    IntMasterEnable();                                       //Se habilitan interrupciones del periférico NVIC.
+    IntMasterEnable();                                       //Se habilitan interrupciones del perifï¿½rico NVIC.
     IntEnable(INT_GPIOB);                                    //Se habilitan interrupciones por PUERTO B.
     GPIOIntEnable(GPIO_PORTB_BASE, GPIO_INT_PIN_1);          //Se habilita interrupciones por PB1 = ECHO.
-    GPIOIntTypeSet(GPIO_PORTB_BASE, ECHO, GPIO_BOTH_EDGES);  //ECHO interrumpirá por flanco de subida y bajada.
+    GPIOIntTypeSet(GPIO_PORTB_BASE, ECHO, GPIO_BOTH_EDGES);  //ECHO interrumpirï¿½ por flanco de subida y bajada.
 }
 
 void TIMERSetup(void){
     SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);        //Se habilita TIMER0.
-    TimerConfigure(TIMER0_BASE, TIMER_CFG_ONE_SHOT_UP);  //TIMER0 contará con 1 disparo ascendente.
+    TimerConfigure(TIMER0_BASE, TIMER_CFG_ONE_SHOT_UP);  //TIMER0 contarï¿½ con 1 disparo ascendente.
 }
 
 void UARTSetup(void){
@@ -58,9 +58,9 @@ void UARTSetup(void){
     UARTConfigSetExpClk(UART0_BASE, SysCtlClockGet(), 115200, ParametrosUART);  //Baudrate=115200, cadena de 8 bits, 1 bit de parada, paridad par.
     UARTStdioConfig(0, 115200, SysCtlClockGet());                               //Puerto 0, Baudarate=115200, Reloj de UART.
 }
-/************************************************ RUTINAS DE INTERRUPCIÓN *****************************************************/
+/************************************************ RUTINAS DE INTERRUPCIï¿½N *****************************************************/
 void ECHOPulse(void){
-    GPIOIntClear(GPIO_PORTB_BASE, ECHO);  //Se limpia la interrupción de ECHO.
+    GPIOIntClear(GPIO_PORTB_BASE, ECHO);  //Se limpia la interrupciï¿½n de ECHO.
     double conteo = 0;
     if(echo){
         TimerLoadSet(TIMER0_BASE, TIMER_A, 2400000);   //Se carga al timer con 2.4M = 30ms.
@@ -70,8 +70,8 @@ void ECHOPulse(void){
         TimerDisable(TIMER0_BASE, TIMER_A);            //Se detiene el conteo del TIMER0A.
         conteo = TimerValueGet(TIMER0_BASE, TIMER_A);  //Se toma el valor actual que tiene el TIMER0A.
         time = conteo/80000000;                        //Se calcula el tiempo transcurrido en seg.
-        TimerLoadSet(TIMER0_BASE, TIMER_A, conteo);    //Se cambia el límite de conteo al TIMER0A.
-        TimerEnable(TIMER0_BASE, TIMER_A);             //Se continúa el conteo de TIMER0A para que se resetee.
+        TimerLoadSet(TIMER0_BASE, TIMER_A, conteo);    //Se cambia el lï¿½mite de conteo al TIMER0A.
+        TimerEnable(TIMER0_BASE, TIMER_A);             //Se continï¿½a el conteo de TIMER0A para que se resetee.
         echo = true;
         medidaHecha = true;
     }
@@ -86,7 +86,7 @@ double GetPosition(void){
     //Espera flanco de subida por el pin ECHO.
     while(!medidaHecha);
     medidaHecha = false;
-    //El tiempo del pulso ECHO ya fué medido. Se determina la distancia.
+    //El tiempo del pulso ECHO ya fuï¿½ medido. Se determina la distancia.
     distance = (SoundVel*time)/2;
     //Demora de seguridad y retorna con el valor de centimetros calculado.
     SysCtlDelay(4000000/3);                           //delay = 50ms.
@@ -103,7 +103,7 @@ void PrintData(int dato){
     int i, longitudArreglo = 0;
     char DATO[] = "";
 
-    ltoa(dato, DATO);
+    ltoa(dato, DATO, 10);
     longitudArreglo = ArraySize(DATO);
     for(i = 0; i < longitudArreglo; i++){
         UARTCharPut(UART0_BASE, DATO[i]);
