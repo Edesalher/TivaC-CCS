@@ -1,8 +1,8 @@
-/*--------------------------------------------LIBRERÕAS DE C-------------------------------------------------*/
+/*--------------------------------------------LIBRER√çAS DE C-------------------------------------------------*/
 #include<stdint.h>
 #include<stdbool.h>
 #include <string.h>
-/*-----------------------------------------LIBRERÕAS PARA LA TIVA C------------------------------------------*/
+/*-----------------------------------------LIBRER√çAS PARA LA TIVA C------------------------------------------*/
 #include "inc/hw_memmap.h"
 #include "inc/hw_types.h"
 #include "inc/tm4c123gh6pm.h"
@@ -68,7 +68,7 @@ int main(void){
     UARTsscanf(UART1_BASE, mensaje);
     UARTsprintf_vector(UART0_BASE, mensaje, sizeof(mensaje));
 
-    UARTsprintf(UART1_BASE, "AT+NAME=GRUPO17\n\r"); //Cambiar nombre del mÛdulo bluetooth a "17"
+    UARTsprintf(UART1_BASE, "AT+NAME=GRUPO17\n\r"); //Cambiar nombre del mÔøΩdulo bluetooth a "17"
     UARTsscanf(UART1_BASE, mensaje);
     UARTsprintf_vector(UART0_BASE, mensaje, sizeof(mensaje));
 
@@ -76,7 +76,7 @@ int main(void){
     UARTsscanf(UART1_BASE, mensaje);
     UARTsprintf_vector(UART0_BASE, mensaje, sizeof(mensaje));
 
-    UARTsprintf(UART1_BASE, "AT+PSWD=SaleEnSemestre\n\r"); //Cambiar cÛdigo de vinculaciÛn: PIN = SaleMicro
+    UARTsprintf(UART1_BASE, "AT+PSWD=SaleEnSemestre\n\r"); //Cambiar cÔøΩdigo de vinculaciÔøΩn: PIN = SaleMicro
     UARTsscanf(UART1_BASE, mensaje);
     UARTsprintf_vector(UART0_BASE, mensaje, sizeof(mensaje));
 
@@ -84,7 +84,7 @@ int main(void){
     UARTsscanf(UART1_BASE, mensaje);
     UARTsprintf_vector(UART0_BASE, mensaje, sizeof(mensaje));
 
-    UARTsprintf(UART1_BASE, "AT+RESET\n\r"); //Resetear nuestro mÛdulo; despuÈs de hacer esto salimos del MODO AT
+    UARTsprintf(UART1_BASE, "AT+RESET\n\r"); //Resetear nuestro mÔøΩdulo; despuÔøΩs de hacer esto salimos del MODO AT
     UARTsscanf(UART1_BASE, mensaje);
     UARTsprintf_vector(UART0_BASE, mensaje, sizeof(mensaje));
 
